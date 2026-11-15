@@ -1,0 +1,59 @@
+name: Reusable AI Evaluation Workflow
+
+on:
+  workflow_call:
+    inputs:
+      eval-command:
+        description: "Command to execute AI eval suite"
+        required: false
+        default: "pnpm run test:ai-eval"
+        type: string
+      report-path:
+        description: "Path to output evaluation report"
+        required: false
+        default: "ai-eval-report.json"
+        type: string
+    secrets:
+      GEMINI_API_KEY:
+        required: false
+      OPENAI_API_KEY:
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  ai-eval:
+    name: Prompt Regression & Safety Guardrails Eval
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile || npm ci
+
+      - name: Run AI Prompt & Safety Evaluations
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          CI_MOCK_LLM: "true"
+        run: ${{ inputs.eval-command }}
+
+      - name: Archive Evaluation Results
+        uses: actions/upload-artifact@v4
+        with:
+          name: ai-eval-results
+          path: ${{ inputs.report-path }}
+          if-no-files-found: ignore

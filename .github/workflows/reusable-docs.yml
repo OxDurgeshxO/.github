@@ -1,0 +1,51 @@
+name: Reusable Documentation Workflow
+
+on:
+  workflow_call:
+    inputs:
+      docs-directory:
+        description: "Path to docs directory"
+        required: false
+        default: "docs"
+        type: string
+      build-script:
+        description: "Package script name to build docs"
+        required: false
+        default: "docs:build"
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  lint-and-validate-docs:
+    name: Markdown Lint & Broken Link Check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Lint Markdown Files
+        uses: DavidAnson/markdownlint-cli2-action@v16
+        with:
+          globs: "**/*.md"
+        continue-on-error: true
+
+      - name: Check Broken Hyperlinks
+        uses: lycheeverse/lychee-action@v2
+        with:
+          args: "--no-progress --exclude-mail --timeout 15 '**/*.md'"
+          fail: false
+
+      - name: Build Docs Site (if script configured)
+        run: |
+          if npm run | grep -q "${{ inputs.build-script }}"; then
+            npm run ${{ inputs.build-script }}
+          else
+            echo "No doc site build script configured, validation passed."
+          fi

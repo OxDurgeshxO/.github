@@ -1,0 +1,64 @@
+name: Reusable Release Workflow
+
+on:
+  workflow_call:
+    inputs:
+      publish-npm:
+        description: "Whether to publish packages to npm/GitHub Packages"
+        required: false
+        default: false
+        type: boolean
+      create-github-release:
+        description: "Whether to create a GitHub Release with tags"
+        required: false
+        default: true
+        type: boolean
+    secrets:
+      NPM_TOKEN:
+        required: false
+      GH_RELEASE_TOKEN:
+        required: false
+
+permissions:
+  contents: write
+  pull-requests: write
+  packages: write
+  id-token: write
+
+jobs:
+  release:
+    name: Changesets Version & Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Build Packages
+        run: pnpm run build --if-present
+
+      - name: Create Release Pull Request or Publish
+        uses: changesets/action@v1
+        with:
+          publish: ${{ inputs.publish-npm && 'pnpm exec changeset publish' || 'echo "Skipping publish"' }}
+          version: pnpm exec changeset version
+          commit: "chore(release): version packages"
+          title: "chore(release): version packages"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_RELEASE_TOKEN || secrets.GITHUB_TOKEN }}
+          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

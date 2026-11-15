@@ -1,0 +1,95 @@
+name: Reusable CI Workflow
+
+on:
+  workflow_call:
+    inputs:
+      node-version:
+        description: "Node.js version to test against"
+        required: false
+        default: "22"
+        type: string
+      package-manager:
+        description: "Package manager to use (pnpm | npm)"
+        required: false
+        default: "pnpm"
+        type: string
+      run-build:
+        description: "Whether to run build step"
+        required: false
+        default: true
+        type: boolean
+      working-directory:
+        description: "Working directory"
+        required: false
+        default: "."
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  ci:
+    name: CI Pipeline (${{ inputs.package-manager }}, Node ${{ inputs.node-version }})
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ inputs.working-directory }}
+
+    steps:
+      - name: Checkout Source Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm (if required)
+        if: inputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js ${{ inputs.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ inputs.node-version }}
+          cache: ${{ inputs.package-manager }}
+
+      - name: Install Dependencies (Frozen Lockfile)
+        run: |
+          if [ "${{ inputs.package-manager }}" = "pnpm" ]; then
+            pnpm install --frozen-lockfile
+          else
+            npm ci
+          fi
+
+      - name: Run Type Checking
+        run: |
+          if [ "${{ inputs.package-manager }}" = "pnpm" ]; then
+            pnpm run typecheck --if-present || pnpm exec tsc --noEmit
+          else
+            npm run typecheck --if-present || npx tsc --noEmit
+          fi
+
+      - name: Run Linter
+        run: |
+          if [ "${{ inputs.package-manager }}" = "pnpm" ]; then
+            pnpm run lint --if-present
+          else
+            npm run lint --if-present
+          fi
+
+      - name: Run Test Suite
+        run: |
+          if [ "${{ inputs.package-manager }}" = "pnpm" ]; then
+            pnpm test
+          else
+            npm test
+          fi
+
+      - name: Run Build
+        if: inputs.run-build
+        run: |
+          if [ "${{ inputs.package-manager }}" = "pnpm" ]; then
+            pnpm run build --if-present
+          else
+            npm run build --if-present
+          fi

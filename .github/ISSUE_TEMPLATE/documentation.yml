@@ -1,0 +1,43 @@
+name: Documentation Improvement
+description: Propose improvements, additions, or corrections to repository documentation
+title: "[DOCS]: "
+labels: ["documentation"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Accurate, comprehensive documentation is a first-class engineering deliverable.
+  - type: dropdown
+    id: audience
+    attributes:
+      label: Target Audience
+      description: Who is this documentation intended for?
+      options:
+        - End Users & Consumers
+        - Application Developers / Contributors
+        - DevOps / Site Reliability Engineers
+        - AI / ML Researchers
+        - System Architects
+    validations:
+      required: true
+  - type: textarea
+    id: missing_information
+    attributes:
+      label: Missing or Inaccurate Information
+      description: What is currently missing, outdated, or confusing in existing docs?
+    validations:
+      required: true
+  - type: textarea
+    id: proposed_section
+    attributes:
+      label: Proposed Section or Changes
+      description: Draft outline, headings, code snippets, or revised content.
+    validations:
+      required: true
+  - type: textarea
+    id: source_links
+    attributes:
+      label: Source Links & References
+      description: Links to existing doc pages, related code lines, PRs, or external specifications.
+    validations:
+      required: false

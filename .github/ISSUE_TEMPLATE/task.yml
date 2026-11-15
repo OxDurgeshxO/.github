@@ -1,0 +1,59 @@
+name: Engineering Task
+description: Track an engineering chore, refactor, technical debt item, or infrastructure task
+title: "[TASK]: "
+labels: ["task", "engineering"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Track concrete engineering tasks, refactors, dependency updates, and maintenance chores.
+  - type: textarea
+    id: objective
+    attributes:
+      label: Objective
+      description: What is the goal of this task and why is it needed?
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope & Non-Goals
+      description: Define boundaries of what is included and explicitly what is excluded.
+      placeholder: |
+        - In-scope: ...
+        - Out-of-scope: ...
+    validations:
+      required: true
+  - type: textarea
+    id: deliverables
+    attributes:
+      label: Deliverables
+      description: Specific code artifacts, packages, configurations, or modules produced.
+      placeholder: |
+        - [ ] Service module or endpoint
+        - [ ] Unit & integration tests
+        - [ ] Documentation update
+    validations:
+      required: true
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependencies & Blockers
+      description: Required PRs, external packages, upstream services, or RFCs before starting.
+    validations:
+      required: false
+  - type: textarea
+    id: definition_of_done
+    attributes:
+      label: Definition of Done
+      description: Rigorous checklist that must be passed before merging.
+      value: |
+        - [ ] All unit, integration, and regression tests pass
+        - [ ] Strict type checking passes with 0 errors
+        - [ ] Code coverage meets repository minimums (>=70% total, >=85% core logic)
+        - [ ] Linter and formatter pass cleanly
+        - [ ] Documentation and architectural records updated
+        - [ ] No secret or credential leaked
+        - [ ] Reviewed and approved by CODEOWNERS
+    validations:
+      required: true
