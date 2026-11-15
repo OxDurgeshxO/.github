@@ -1,0 +1,39 @@
+name: Live Demo Uptime & Heartbeat
+
+permissions:
+  contents: read
+
+on:
+  schedule:
+    # Runs every 12 hours to prevent Streamlit sleep mode and monitor uptime
+    - cron: '0 */12 * * *'
+  workflow_dispatch:
+
+jobs:
+  ping-demos:
+    name: Ping Showcase Demos
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        endpoint:
+          - name: "Durgesh Flagship Portfolio"
+            url: "https://durgesh-portfolio.pages.dev"
+          - name: "TrendSprout AI Studio"
+            url: "https://trendsprout.vercel.app"
+          - name: "RoleRadar Career Platform"
+            url: "https://rolefit-2.vercel.app"
+          - name: "Skillverse 3D Space"
+            url: "https://skillverse-3d.pages.dev"
+          - name: "Bank Churn Prediction Studio"
+            url: "https://bank-churn-prediction-studio-mrl8whyxpnhkyfvfwmtqwq.streamlit.app"
+          - name: "MarketMatch AI"
+            url: "https://oxdurgeshxo-marketmatch-ai-app-y8ysbm.streamlit.app"
+
+    steps:
+      - name: Ping ${{ matrix.endpoint.name }}
+        run: |
+          echo "Pinging ${{ matrix.endpoint.name }} at ${{ matrix.endpoint.url }}..."
+          STATUS=$(curl -s -L -f -m 30 -o /dev/null -w "%{http_code}
+" "${{ matrix.endpoint.url }}" || echo "TIMEOUT")
+          echo "Response status: $STATUS"
