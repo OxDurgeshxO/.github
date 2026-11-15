@@ -27,7 +27,7 @@ jobs:
         node: ${{ fromJSON(inputs.node-versions) }}
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Setup pnpm (if required)
         if: inputs.package-manager == 'pnpm'
