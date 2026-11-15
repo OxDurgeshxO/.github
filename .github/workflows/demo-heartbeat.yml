@@ -5,9 +5,8 @@ permissions:
 
 on:
   schedule:
-    # Runs every 12 hours to prevent Streamlit sleep mode and monitor uptime
     - cron: '0 */12 * * *'
-  workflow_dispatch:
+  workflow_dispatch: {}
 
 jobs:
   ping-demos:
@@ -34,6 +33,5 @@ jobs:
       - name: Ping ${{ matrix.endpoint.name }}
         run: |
           echo "Pinging ${{ matrix.endpoint.name }} at ${{ matrix.endpoint.url }}..."
-          STATUS=$(curl -s -L -f -m 30 -o /dev/null -w "%{http_code}
-" "${{ matrix.endpoint.url }}" || echo "TIMEOUT")
-          echo "Response status: $STATUS"
+          STATUS=$(curl -s -L -m 30 -o /dev/null -w "%{http_code}" "${{ matrix.endpoint.url }}" || echo "TIMEOUT")
+          echo "Response code: $STATUS"
