@@ -1,32 +1,74 @@
 name: Bug Report
-description: Create a report to help us improve the software
-labels: ["bug"]
+description: Report an error, bug, or unexpected behavior
+title: "[BUG]: "
+labels: ["bug", "triage"]
 body:
   - type: markdown
     attributes:
-      value: Thanks for taking the time to fill out this bug report!
+      value: |
+        Thanks for filing a bug report! Please provide as much detailed context as possible so we can reproduce and fix it quickly.
   - type: input
     id: summary
     attributes:
       label: Summary
-      description: Brief one-line description of the bug
-    validations:
-      required: true
-  - type: textarea
-    id: reproduction
-    attributes:
-      label: Steps to Reproduce
-      description: Exact steps to reproduce the behavior
-      placeholder: |
-        1. Go to '...'
-        2. Click on '....'
-        3. Scroll down to '....'
+      description: Concise description of the bug
+      placeholder: e.g. "Pose detection drops frames when camera rotates to landscape"
     validations:
       required: true
   - type: textarea
     id: expected
     attributes:
       label: Expected Behavior
-      description: A clear description of what you expected to happen
+      description: What should happen under expected conditions
     validations:
       required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happens
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Detailed, minimal steps to reproduce the issue
+      placeholder: |
+        1. Start workout session
+        2. Position camera 2m away
+        3. Perform 3 squats
+        4. Observe rep counter remains at 0
+    validations:
+      required: true
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      description: How critical is this issue?
+      options:
+        - Critical (Crash, data loss, security vulnerability)
+        - High (Core functionality broken, no workaround)
+        - Medium (Functionality impaired, workaround exists)
+        - Low (Cosmetic, minor glitch, minor documentation gap)
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, browser/runtime, node/python version, commit SHA or release tag
+      placeholder: |
+        - OS: Windows 11 / Ubuntu 24.04 / macOS 15
+        - Browser / Node: Chrome 132 / Node v26.13.1 / Python 3.12
+        - Version / Commit SHA: main @ abc1234
+    validations:
+      required: true
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs & Screenshots
+      description: Paste relevant stack traces, terminal output, or browser console logs (redact secrets!)
+      render: shell
+    validations:
+      required: false

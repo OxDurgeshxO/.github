@@ -1,28 +1,54 @@
 name: Feature Request
-description: Suggest an idea or enhancement for this project
-labels: ["enhancement"]
+description: Propose a new feature, enhancement, or capability
+title: "[FEAT]: "
+labels: ["enhancement", "feature", "triage"]
 body:
   - type: markdown
     attributes:
-      value: Thank you for suggesting a new idea or improvement!
-  - type: input
-    id: title
-    attributes:
-      label: Feature Title
-      description: Short title for this proposal
-    validations:
-      required: true
+      value: |
+        Thank you for suggesting an improvement! Please describe the problem you are solving and your proposed solution.
   - type: textarea
     id: problem
     attributes:
       label: Problem Statement
-      description: Is your feature request related to a problem?
+      description: What user problem, pain point, or limitation are you addressing?
+      placeholder: "A clear and concise description of what the problem is. e.g. I'm always frustrated when..."
     validations:
       required: true
   - type: textarea
     id: solution
     attributes:
       label: Proposed Solution
-      description: Describe the solution you'd like
+      description: How should this feature work? Include technical design details or API expectations if applicable.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: What other approaches or workarounds did you consider and why were they rejected?
+    validations:
+      required: false
+  - type: textarea
+    id: acceptance_criteria
+    attributes:
+      label: Acceptance Criteria
+      description: What conditions must be satisfied for this feature to be marked complete?
+      placeholder: |
+        - [ ] Criterion 1: User can configure X via environment variable
+        - [ ] Criterion 2: Test coverage added with >=85% branch coverage
+        - [ ] Criterion 3: Documentation updated in docs/
+    validations:
+      required: true
+  - type: dropdown
+    id: priority
+    attributes:
+      label: Priority
+      description: Proposed priority level
+      options:
+        - P0 - Blocker / Strategic MVP Core
+        - P1 - High Priority / Fast Follow
+        - P2 - Medium Priority / Standard Backlog
+        - P3 - Nice-to-Have / Future Exploration
     validations:
       required: true

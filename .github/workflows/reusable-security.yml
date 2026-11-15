@@ -1,0 +1,78 @@
+name: Reusable Security Workflow
+
+on:
+  workflow_call:
+    inputs:
+      language:
+        description: "Primary language for CodeQL (javascript-typescript | python)"
+        required: false
+        default: "javascript-typescript"
+        type: string
+      package-manager:
+        description: "Package manager for audit (pnpm | npm)"
+        required: false
+        default: "pnpm"
+        type: string
+      audit-level:
+        description: "Audit failure severity level"
+        required: false
+        default: "high"
+        type: string
+
+permissions:
+  contents: read
+  security-events: write
+  actions: read
+
+jobs:
+  audit:
+    name: Dependency Audit & Secret Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup pnpm (if required)
+        if: inputs.package-manager == 'pnpm'
+        uses: pnpm/action-setup@v4
+        with:
+          run_install: false
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Run Package Audit
+        run: |
+          if [ "${{ inputs.package-manager }}" = "pnpm" ]; then
+            pnpm audit --audit-level=${{ inputs.audit-level }} || echo "Audit completed with warnings"
+          else
+            npm audit --audit-level=${{ inputs.audit-level }} || echo "Audit completed with warnings"
+          fi
+
+      - name: Secret Scan with Gitleaks
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+  codeql:
+    name: CodeQL SAST Analysis (${{ inputs.language }})
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ inputs.language }}
+          queries: +security-and-quality
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3
+        with:
+          category: "/language:${{ inputs.language }}"

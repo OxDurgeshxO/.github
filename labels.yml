@@ -1,0 +1,70 @@
+# GitHub Organization Label Taxonomy
+# Used for issue/PR categorization and automation
+
+- name: "bug"
+  color: "d73a4a"
+  description: "Something isn't working as expected"
+
+- name: "documentation"
+  color: "0075ca"
+  description: "Improvements or additions to documentation"
+
+- name: "duplicate"
+  color: "cfd3d7"
+  description: "This issue or pull request already exists"
+
+- name: "enhancement"
+  color: "a2eeef"
+  description: "New feature or request"
+
+- name: "feature"
+  color: "0e8a16"
+  description: "New core feature or capability"
+
+- name: "good first issue"
+  color: "7057ff"
+  description: "Good for newcomers"
+
+- name: "help wanted"
+  color: "008672"
+  description: "Extra attention is needed"
+
+- name: "invalid"
+  color: "e4e669"
+  description: "This doesn't seem right"
+
+- name: "question"
+  color: "d876e3"
+  description: "Further information is requested"
+
+- name: "wontfix"
+  color: "ffffff"
+  description: "This will not be worked on"
+
+- name: "security"
+  color: "b60205"
+  description: "Security vulnerability, CVE, or compliance issue"
+
+- name: "performance"
+  color: "ff9900"
+  description: "Performance optimization, latency reduction, throughput enhancement"
+
+- name: "ai-eval"
+  color: "5319e7"
+  description: "AI prompt engineering, model cards, evaluation suites, guardrails"
+
+- name: "cv-vision"
+  color: "1d76db"
+  description: "Computer vision, pose estimation, video frame processing"
+
+- name: "systems"
+  color: "0052cc"
+  description: "Low-level systems, Redis protocol, TCP networking, persistence"
+
+- name: "dependencies"
+  color: "0366d6"
+  description: "Pull requests that update a dependency file"
+
+- name: "triage"
+  color: "fbca04"
+  description: "Awaiting triage and assignment by maintainers"

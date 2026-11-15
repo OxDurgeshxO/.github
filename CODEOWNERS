@@ -1,0 +1,27 @@
+# Global CODEOWNERS
+# Automatically assigns reviewers based on file paths.
+# See https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default owner for everything
+* @OxDurgeshxO
+
+# Security & Compliance
+SECURITY.md @OxDurgeshxO
+.github/workflows/security*.yml @OxDurgeshxO
+.github/workflows/reusable-security.yml @OxDurgeshxO
+AI_USAGE_POLICY.md @OxDurgeshxO
+
+# Workflows & CI/CD
+.github/workflows/ @OxDurgeshxO
+.github/dependabot.yml @OxDurgeshxO
+
+# Architecture & Standards
+ENGINEERING_STANDARDS.md @OxDurgeshxO
+GOVERNANCE.md @OxDurgeshxO
+RELEASE_PROCESS.md @OxDurgeshxO
+REPOSITORY_HEALTH.md @OxDurgeshxO
+
+# Reusable Templates
+templates/ @OxDurgeshxO
+.github/templates/ @OxDurgeshxO
+.github/ISSUE_TEMPLATE/ @OxDurgeshxO
